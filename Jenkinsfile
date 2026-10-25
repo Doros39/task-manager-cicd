@@ -2,21 +2,19 @@ pipeline {
     agent any
     
     stages {
-        stage('Pobranie i weryfikacja kodu') {
-            steps {
-                echo 'Sprawdzanie struktury katalogów pobranej z GitHuba...'
-                sh 'ls -la'
-                sh 'ls -la backend/'
-                sh 'ls -la frontend/'
-            }
-        }
-        stage('Przygotowanie do budowy') {
+        stage('Budowa obrazu Backend') {
             steps {
                 dir('backend') {
-                    echo 'Katalog backendu wykryty. Gotowość do wykonania docker build...'
+                    echo 'Budowanie obrazu dla backendu (Node.js)...'
+                    sh 'docker build -t trello-clone-backend:latest .'
                 }
+            }
+        }
+        stage('Budowa obrazu Frontend') {
+            steps {
                 dir('frontend') {
-                    echo 'Katalog frontendu wykryty. Gotowość do wykonania docker build...'
+                    echo 'Budowanie obrazu dla frontendu (Nginx)...'
+                    sh 'docker build -t trello-clone-frontend:latest .'
                 }
             }
         }
